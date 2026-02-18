@@ -220,7 +220,7 @@ export function LeadForm() {
             name="stuckDuration"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-xs uppercase tracking-wider text-muted-foreground">Time in range</FormLabel>
+                <FormLabel className="text-xs uppercase tracking-wider text-muted-foreground">How long have you been stuck in this range?</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="input-arch">
@@ -245,9 +245,12 @@ export function LeadForm() {
             <FormLabel className="text-xs uppercase tracking-wider text-muted-foreground block">
               Estimated Revenue Breakdown (%)
             </FormLabel>
+            <div className="text-[10px] uppercase text-muted-foreground/60 font-mono italic">
+              Please estimate — totals should approximate 100%
+            </div>
             {mixWarning && (
               <div className="flex items-center gap-1.5 text-primary/60 text-[10px] uppercase font-mono italic animate-pulse">
-                <AlertCircle size={10} /> Should sum to 100%
+                <AlertCircle size={10} />
               </div>
             )}
           </div>

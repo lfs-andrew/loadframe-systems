@@ -174,7 +174,7 @@ export default function Home() {
             <ul className="space-y-6">
               {[
                 { title: "The Load Map", desc: "Visual representation of your traffic-to-revenue efficiency." },
-                { title: "Fragility Index Score", desc: "A single 0-100 metric rating your business's ability to survive shocks." },
+                { title: "Fragility Index Score", desc: "A single 0-100 metric rating your business's ability to survive revenue shocks." },
                 { title: "Structural Risk Findings", desc: "Three prioritized architectural flaws needing immediate remediation." },
               ].map((item, i) => (
                 <li key={i} className="flex gap-4 items-start">
@@ -239,8 +239,8 @@ export default function Home() {
                 {[
                   "Monetized creators (ads/sponsors/products/services)",
                   "Plateaued in the ~$3k–$10k/month range",
-                  "High-ticket operators / course sellers",
-                  "AI-era solopreneurs with fragile funnels"
+                  "Revenue feels capped despite consistent output",
+                  "Heavy reliance on one platform or one monetization source"
                 ].map((item, i) => (
                   <li key={i} className="flex gap-3 text-muted-foreground text-sm">
                     <span className="w-1.5 h-1.5 bg-primary mt-2 rounded-full flex-shrink-0" />
@@ -283,6 +283,7 @@ export default function Home() {
             <p className="text-muted-foreground text-lg mb-2">
               Complete the form below to apply. Selected participants receive a complimentary <span className="text-primary">LoadFrame Fragility Audit</span>.
             </p>
+            <p className="text-sm font-medium text-white/80 mb-4 block">We review applications manually. Not all applicants are selected.</p>
             <p className="text-xs font-mono text-primary/60">Takes ~2–3 minutes.</p>
           </div>
 
