@@ -11,6 +11,16 @@ export default {
         sm: ".1875rem", /* 3px */
       },
       colors: {
+        graphite: {
+          900: "#1a1a1a",
+          800: "#2a2a2a",
+          700: "#3a3a3a",
+        },
+        gold: {
+          DEFAULT: "#C5A059",
+          muted: "#8A703E",
+        },
+        offwhite: "#F0F0F0",
         // Flat / base colors (regular buttons)
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
