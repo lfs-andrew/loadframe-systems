@@ -12,13 +12,18 @@ export function Footer() {
             </p>
           </div>
           <div className="md:text-right">
-            <h4 className="font-display font-semibold text-white mb-4">Contact</h4>
-            <a 
-              href="mailto:audit@loadframe.systems" 
-              className="text-primary hover:text-white transition-colors block mb-2"
-            >
-              audit@loadframe.systems
-            </a>
+            <h4 className="font-display font-semibold text-white mb-4">Legal</h4>
+            <div className="space-y-2">
+              <Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors block text-sm">
+                Privacy Policy
+              </Link>
+              <a 
+                href="mailto:audit@loadframe.systems" 
+                className="text-primary hover:text-white transition-colors block text-sm"
+              >
+                audit@loadframe.systems
+              </a>
+            </div>
             <p className="text-xs text-muted-foreground mt-8">
               &copy; {new Date().getFullYear()} LoadFrame Systems. All rights reserved.
             </p>

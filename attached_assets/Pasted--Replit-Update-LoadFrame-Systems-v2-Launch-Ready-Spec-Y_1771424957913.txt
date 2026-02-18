@@ -1,0 +1,149 @@
+
+---
+
+## Replit Update: LoadFrame Systems — v2 Launch-Ready Spec
+
+You shipped the base landing page. Now we need a **pre-launch structural audit version** optimized for **lead quality**, not volume.
+
+### 0) Core Target (must be consistent everywhere)
+
+We are qualifying **monetized + plateaued creators**.
+
+**Replace any language like “$5k–$50k/mo” or “annual revenue.”**
+Standardize to:
+
+* **Monthly revenue (USD)**
+* Plateau band: **~$3k–$10k/month**
+* Narrative: **structure can’t carry more load**
+
+### 1) Hero Copy Update (engineered, non-absolute)
+
+Headline:
+**You’re making money. The structure may not support more.**
+
+Subhead:
+LoadFrame Systems stress-tests monetized creator businesses to identify structural fragility across revenue concentration, platform dependency, and offer architecture.
+
+Micro qualifier (small text):
+**For monetized creators plateaued in the ~$3k–$10k/month range.**
+
+Threshold line (under subhead):
+If revenue won’t reliably break past ~$5k/month, the constraint is usually structural—not effort.
+
+Primary CTA: **Apply to Participate** → scroll to form
+Secondary CTA: **See what you’ll get** → scroll to deliverables
+
+### 2) Add “Why Plateau Happens” Section (short, 4 bullets)
+
+After “What We Measure” add:
+
+* One revenue beam carries too much weight
+* One platform drives too much opportunity
+* Offers lack load distribution
+* Effort increases without structural redesign
+
+### 3) Form: Increase Signal Density (final field list)
+
+Keep it single-page form (not multi-step unless it’s already done).
+Above the form add a micro-line:
+
+**Takes ~2–3 minutes.**
+
+Form fields (final):
+
+1. Name (required)
+
+2. Email (required)
+
+3. Link (YouTube/site/profile) (optional)
+
+4. Primary platform (dropdown) (required)
+
+5. Audience size range (dropdown) (required)
+
+6. **Monthly Revenue (USD)** (dropdown) (required)
+
+* `< $1k`
+* `$1k–$3k`
+* `$3k–$5k`
+* `$5k–$8k`
+* `$8k–$12k`
+* `$12k+`
+
+7. Revenue mix % (required, numeric inputs)
+
+* Ads
+* Sponsors
+* Products/Services
+* Affiliates
+* Other
+  (Validate: sum should equal 100; if not, show friendly inline warning but allow submit.)
+
+8. **How long have you been stuck in this range?** (dropdown) (required)
+
+* `< 3 months`
+* `3–6 months`
+* `6–12 months`
+* `12+ months`
+
+9. **Which best describes your current monetization?** (checkboxes, choose all) (required)
+
+* One main offer carries most revenue
+* Revenue spikes around launches, then drops
+* Sponsorships are unpredictable month-to-month
+* Income depends heavily on one platform
+* I don’t know which content actually drives revenue
+
+10. Biggest worry if reach drops 50% (short answer) (required)
+11. Open to a 15-min call? (Yes/No) (required)
+
+### 4) Compliance + Long-Term Hygiene (required)
+
+Add a required checkbox at the end of the form:
+
+* **“I agree to be contacted regarding this study.”** (required)
+
+Add a minimal footer link:
+
+* **Privacy** → `/privacy`
+
+Create `/privacy` page with basic language:
+
+* what we collect (form fields)
+* why (research + contacting about study)
+* storage (database)
+* no selling data
+* contact email for deletion requests
+
+### 5) Tone Guardrails
+
+No hype language. No “AI-powered.” No “10x.”
+This is a **structural diagnostic study**, not coaching.
+
+Optional credibility line (one sentence, no backstory):
+**This is a structured diagnostic study — not coaching or growth hacks.**
+
+### 6) Backend/Data Schema Update
+
+Update the database schema to store:
+
+* monthlyRevenueRange
+* stuckDuration
+* revenueMix (json: ads/sponsors/products/affiliates/other)
+* monetizationFlags (array)
+* consent (boolean)
+* createdAt timestamp
+* source/referrer if available
+
+### 7) Success UX
+
+After submit:
+“Thanks — if selected, we’ll reach out within 7 days.”
+
+### 8) Branding
+
+Use the provided logo + favicon.
+Keep theme: graphite + muted gold (your palette is fine).
+
+---
+

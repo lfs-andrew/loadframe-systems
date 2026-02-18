@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Link as ScrollLink } from "react-scroll";
 import { useState, useEffect } from "react";
-import logo from "@assets/ChatGPT_Image_Feb_18,_2026,_08_51_22_AM_1771422884921.png";
+import logo from "@assets/LoadFrame_Logo_1771423812376.png";
 import { Menu, X } from "lucide-react";
 
 export function Navbar() {
@@ -32,12 +32,12 @@ export function Navbar() {
     >
       <div className="container-wide flex items-center justify-between">
         {/* Logo Area */}
-        <div className="flex items-center gap-3">
-          <img src={logo} alt="LoadFrame Systems" className="h-10 w-auto rounded-sm" />
+        <Link href="/" className="flex items-center gap-3 group">
+          <img src={logo} alt="LoadFrame Systems" className="h-10 w-auto rounded-sm transition-transform group-hover:rotate-3" />
           <span className="font-display font-bold text-xl tracking-tight text-white hidden sm:block">
-            LoadFrame
+            LOADFRAME <span className="text-primary/60 font-light">SYSTEMS</span>
           </span>
-        </div>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
@@ -60,7 +60,7 @@ export function Navbar() {
             offset={-50}
             className="btn-primary flex items-center cursor-pointer"
           >
-            Participate
+            Apply to Participate
           </ScrollLink>
         </div>
 
@@ -97,7 +97,7 @@ export function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className="btn-primary w-full flex justify-center items-center mt-2 cursor-pointer"
           >
-            Participate
+            Apply to Participate
           </ScrollLink>
         </div>
       )}
