@@ -289,12 +289,12 @@ export function LeadForm() {
                   <FormItem key={option.id} className="flex flex-row items-start space-x-3 space-y-0 rounded-none border border-border/40 p-3 bg-background/20 hover:border-primary/30 transition-colors">
                     <FormControl>
                       <Checkbox
-                        checked={field.value?.includes(option.id)}
+                        checked={(field.value as string[])?.includes(option.id)}
                         onCheckedChange={(checked) => {
-                          const current = field.value || [];
+                          const current = (field.value as string[]) || [];
                           return checked
                             ? field.onChange([...current, option.id])
-                            : field.onChange(current.filter((value) => value !== option.id));
+                            : field.onChange(current.filter((value: string) => value !== option.id));
                         }}
                         className="rounded-none border-primary/50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                       />
