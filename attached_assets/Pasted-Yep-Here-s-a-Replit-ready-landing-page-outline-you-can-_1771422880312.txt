@@ -1,0 +1,136 @@
+Yep. Here’s a **Replit-ready landing page outline** you can paste straight into a prompt for their builder (or implement yourself fast). I’ll keep it minimal, premium, and conversion-focused.
+
+---
+
+## Replit Build Spec (1-page site)
+
+### Tech
+
+* Next.js (App Router) + Tailwind
+  *(or plain HTML + Tailwind CDN if you want zero setup)*
+* Single page: `/`
+* Mobile-first, dark mode only
+
+### Assets
+
+* Use provided logo (place top-left and centered in hero as needed)
+* Favicon: same logo, small
+
+---
+
+## Brand + UI Rules
+
+* Background: near-black graphite
+* Panels: slightly lighter graphite
+* Text: soft off-white
+* Accent: muted gold (matches logo)
+
+**No gradients, no neon, no “AI sparkles.”**
+This is structural + premium.
+
+---
+
+## Page Structure
+
+### 1) Top Nav (minimal)
+
+Left: Logo + “LoadFrame Systems”
+Right: Button “Participate” → scroll to form
+
+---
+
+### 2) Hero (above the fold)
+
+**Headline:**
+Reduce revenue fragility and platform dependence.
+
+**Subheadline (1–2 lines):**
+LoadFrame stress-tests monetized creator businesses to identify structural risk across revenue concentration, platform dependency, and offer architecture.
+
+**Primary CTA:** “Participate in the Study” (scroll to form)
+**Secondary CTA:** “See what you’ll get” (scroll to deliverables)
+
+**Micro-cred line (small):**
+For monetized creators earning ~$5k–$50k/month.
+
+---
+
+### 3) “What We Measure” (3 cards)
+
+Card 1: **Revenue Concentration**
+One source carrying most of the weight = single point of failure.
+
+Card 2: **Platform Dependency**
+If reach drops, does income collapse with it?
+
+Card 3: **Offer Architecture**
+Do you have a stack—or one overloaded beam?
+
+---
+
+### 4) Deliverables (what participants receive)
+
+**Selected participants receive:**
+
+* A visual **Load Map** of your business
+* A **Fragility Index** score
+* 3 structural risk findings + next moves
+
+*(Keep it simple—no overpromising.)*
+
+---
+
+### 5) “Who This Is For” (2 columns)
+
+**Good fit**
+
+* Monetized creators (ads/sponsors/products/services)
+* High-ticket operators / course sellers
+* AI-era solopreneurs with fragile funnels
+
+**Not a fit**
+
+* Pre-revenue beginners
+* Pure hobby channels
+* Anyone wanting “growth hacks”
+
+---
+
+### 6) The Form (embedded on page)
+
+Use a clean card panel.
+
+**Fields (keep short):**
+
+* Name
+* Email
+* Primary platform (YouTube/IG/TikTok/Other)
+* Follower/subscriber range (dropdown)
+* Monthly revenue range (dropdown)
+* Revenue breakdown % (Ads, Sponsors, Products/Services, Affiliates, Other) *(can be 5 number inputs)*
+* Biggest worry if reach drops 50% (short answer)
+* “Open to a 15-min call?” (Yes/No)
+
+Button: **Submit**
+
+After submit: “Thanks — if selected, you’ll receive an email within 7 days.”
+
+---
+
+### 7) Footer
+
+Small. Quiet.
+
+* “© LoadFrame Systems”
+* Contact email (once you set it up)
+
+---
+
+## Copy Tone Rules
+
+* Calm, engineered, non-hype
+* Avoid: “10x, viral, crush it, AI-powered”
+* Use: “stress-test, structural, fragility, concentration, dependency”
+
+---
+
