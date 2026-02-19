@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Link as ScrollLink } from "react-scroll";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import logo from "@assets/LoadFrame_Logo_1771423812376.png";
 import { Menu, X } from "lucide-react";
 
@@ -10,9 +10,19 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      // Give it a little hysteresis so tiny scroll nudges don't flap the state
+      // (and so it doesn't flicker if you're right at the threshold).
+      const y = window.scrollY;
+
+      setIsScrolled((prev) => {
+        if (!prev && y > 40) return true;   // turn on after 40px
+        if (prev && y < 20) return false;   // turn off only once back under 20px
+        return prev;
+      });
     };
-    window.addEventListener("scroll", handleScroll);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -24,16 +34,24 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+      className={[
+        "fixed top-0 left-0 right-0 z-50",
+        "border-b transition-colors duration-300",
+        // ✅ constant height — no padding changes
+        "h-20",
         isScrolled
-          ? "bg-background/95 backdrop-blur-md border-border/50 py-3"
-          : "bg-transparent border-transparent py-6"
-      }`}
+          ? "bg-background/95 backdrop-blur-md border-border/50"
+          : "bg-transparent border-transparent",
+      ].join(" ")}
     >
-      <div className="container-wide flex items-center justify-between">
+      <div className="container-wide h-full flex items-center justify-between">
         {/* Logo Area */}
         <Link href="/" className="flex items-center gap-3 group">
-          <img src={logo} alt="LoadFrame Systems" className="h-10 w-auto rounded-sm transition-transform group-hover:rotate-3" />
+          <img
+            src={logo}
+            alt="LoadFrame Systems"
+            className="h-10 w-auto rounded-sm transition-transform group-hover:rotate-3"
+          />
           <span className="font-display font-bold text-xl tracking-tight text-white hidden sm:block">
             LOADFRAME <span className="text-primary/60 font-light">SYSTEMS</span>
           </span>
@@ -57,7 +75,7 @@ export function Navbar() {
             to="participate"
             smooth={true}
             duration={500}
-            offset={-50}
+            offset={-80} // matches the new fixed header height better
             className="btn-primary flex items-center cursor-pointer"
           >
             Apply to Participate
@@ -67,7 +85,8 @@ export function Navbar() {
         {/* Mobile Menu Toggle */}
         <button
           className="md:hidden text-foreground p-2"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMobileMenuOpen((v) => !v)}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -93,7 +112,7 @@ export function Navbar() {
             to="participate"
             smooth={true}
             duration={500}
-            offset={-50}
+            offset={-80}
             onClick={() => setMobileMenuOpen(false)}
             className="btn-primary w-full flex justify-center items-center mt-2 cursor-pointer"
           >

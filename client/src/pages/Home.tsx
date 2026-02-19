@@ -2,13 +2,23 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LeadForm } from "@/components/LeadForm";
 import { motion } from "framer-motion";
-import { ArrowRight, BarChart3, Layers, ShieldAlert, CheckCircle2, XCircle, Zap, Target, Maximize, Activity } from "lucide-react";
-import logo from "@assets/LoadFrame_Logo_1771423812376.png";
+import {
+  ArrowRight,
+  BarChart3,
+  Layers,
+  ShieldAlert,
+  CheckCircle2,
+  XCircle,
+  Zap,
+  Target,
+  Maximize,
+  Activity,
+} from "lucide-react";
 import { Link as ScrollLink } from "react-scroll";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 const staggerContainer = {
@@ -16,9 +26,9 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
-    }
-  }
+      staggerChildren: 0.2,
+    },
+  },
 };
 
 export default function Home() {
@@ -29,8 +39,8 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 container-wide">
         <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-        
-        <motion.div 
+
+        <motion.div
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
@@ -38,35 +48,43 @@ export default function Home() {
         >
           <motion.div variants={fadeIn} className="flex items-center gap-2 mb-6">
             <span className="h-px w-12 bg-primary"></span>
-            <span className="text-primary font-mono text-xs uppercase tracking-widest">Structural Diagnostic Study</span>
+            <span className="text-primary font-mono text-xs uppercase tracking-widest">
+              Structural Diagnostic Study
+            </span>
           </motion.div>
-          
-          <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl font-display font-bold leading-tight mb-8 text-white">
-            You’re making money. <br/>
+
+          <motion.h1
+            variants={fadeIn}
+            className="text-5xl md:text-7xl font-display font-bold leading-tight mb-8 text-white"
+          >
+            You’re making money. <br />
             <span className="text-primary">The structure may not support more.</span>
           </motion.h1>
-          
-          <motion.p variants={fadeIn} className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-4 border-l-2 border-primary/30 pl-6">
+
+          <motion.p
+            variants={fadeIn}
+            className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-4 border-l-2 border-primary/30 pl-6"
+          >
             LoadFrame Systems stress-tests monetized creator businesses to identify structural fragility across revenue concentration, platform dependency, and offer architecture.
           </motion.p>
 
           <motion.p variants={fadeIn} className="text-sm font-mono text-primary/80 mb-8 pl-6">
-            If revenue won’t reliably break past ~$5k/month, the constraint is usually structural—not effort.
+            If revenue won’t reliably break past its current ceiling, the constraint is usually structural—not effort.
           </motion.p>
-          
+
           <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mb-12">
-            <ScrollLink 
-              to="participate" 
-              smooth={true} 
-              offset={-50} 
+            <ScrollLink
+              to="participate"
+              smooth={true}
+              offset={-50}
               className="btn-primary flex items-center justify-center gap-2 cursor-pointer"
             >
               Apply to Participate <ArrowRight size={16} />
             </ScrollLink>
-            <ScrollLink 
-              to="deliverables" 
-              smooth={true} 
-              offset={-100} 
+            <ScrollLink
+              to="deliverables"
+              smooth={true}
+              offset={-100}
               className="btn-outline flex items-center justify-center cursor-pointer"
             >
               See what you’ll get
@@ -84,7 +102,9 @@ export default function Home() {
         <div className="container-wide">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">What We Measure</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+                What We Measure
+              </h2>
               <p className="text-muted-foreground max-w-lg">
                 Our audit process analyzes three critical vectors of business stability.
               </p>
@@ -100,20 +120,23 @@ export default function Home() {
               {
                 icon: <BarChart3 className="w-8 h-8 text-primary" />,
                 title: "Revenue Concentration",
-                desc: "One source carrying most of the weight = single point of failure. If income depends on one sponsor or ad stream, you are fragile."
+                desc:
+                  "When one stream carries disproportionate weight, the system becomes failure-prone. We identify single points of failure across ads, sponsors, products, and services.",
               },
               {
                 icon: <Layers className="w-8 h-8 text-primary" />,
                 title: "Platform Dependency",
-                desc: "Quantifying your distribution risk. If reach drops tomorrow, does income collapse with it? We audit owned vs. rented distribution."
+                desc:
+                  "Quantifying distribution risk. If reach shifts tomorrow, does revenue absorb the shock? We audit owned vs. rented distribution and exposure concentration.",
               },
               {
                 icon: <ShieldAlert className="w-8 h-8 text-primary" />,
                 title: "Offer Architecture",
-                desc: "Do you have a stack—or one overloaded beam? We evaluate the structural integrity of your product ladder and monetization efficiency."
-              }
+                desc:
+                  "Do you have a stack—or one overloaded beam? We evaluate the structural integrity of your product ladder and monetization efficiency.",
+              },
             ].map((card, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -125,9 +148,7 @@ export default function Home() {
                   {card.icon}
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3 font-display">{card.title}</h3>
-                <p className="text-muted-foreground leading-relaxed text-sm">
-                  {card.desc}
-                </p>
+                <p className="text-muted-foreground leading-relaxed text-sm">{card.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -138,16 +159,20 @@ export default function Home() {
       <section className="py-24 bg-background border-b border-border">
         <div className="container-wide">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">Why Plateau Happens</h2>
-            <p className="text-muted-foreground">Effort increases without structural redesign. Growth requires a new frame.</p>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+              Why Plateau Happens
+            </h2>
+            <p className="text-muted-foreground">
+              Effort increases without structural redesign. Growth requires a new frame.
+            </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: <Zap className="w-5 h-5" />, text: "One revenue beam carries too much weight" },
               { icon: <Target className="w-5 h-5" />, text: "One platform drives too much opportunity" },
               { icon: <Maximize className="w-5 h-5" />, text: "Offers lack load distribution" },
-              { icon: <Activity className="w-5 h-5" />, text: "Effort increases without structural redesign" }
+              { icon: <Activity className="w-5 h-5" />, text: "Effort increases without structural redesign" },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-4 p-6 bg-card border border-border">
                 <div className="text-primary">{item.icon}</div>
@@ -162,20 +187,28 @@ export default function Home() {
       <section id="deliverables" className="py-24 container-wide">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">The Output</span>
+            <span className="text-primary font-mono text-xs uppercase tracking-widest mb-4 block">
+              The Output
+            </span>
             <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-8">
-              Engineered for <br/>
+              Engineered for <br />
               <span className="text-muted-foreground">Clarity & Action.</span>
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
               We don't provide vague advice. Selected participants receive a technical audit document containing specific, calculated metrics about your business health.
             </p>
-            
+
             <ul className="space-y-6">
               {[
                 { title: "The Load Map", desc: "Visual representation of your traffic-to-revenue efficiency." },
-                { title: "Fragility Index Score", desc: "A single 0-100 metric rating your business's ability to survive revenue shocks." },
-                { title: "Structural Risk Findings", desc: "Three prioritized architectural flaws needing immediate remediation." },
+                {
+                  title: "Fragility Index Score",
+                  desc: "A single 0-100 metric rating your business's ability to survive revenue shocks.",
+                },
+                {
+                  title: "Structural Risk Findings",
+                  desc: "Three prioritized architectural flaws needing immediate remediation.",
+                },
               ].map((item, i) => (
                 <li key={i} className="flex gap-4 items-start">
                   <div className="mt-1 h-2 w-2 bg-primary rotate-45 flex-shrink-0" />
@@ -191,10 +224,10 @@ export default function Home() {
               This is a structured diagnostic study — not coaching or growth hacks.
             </p>
           </div>
-          
+
           <div className="relative h-[500px] w-full bg-card border border-border p-8 flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(197,160,89,0.03)_50%,transparent_75%,transparent_100%)] bg-[length:20px_20px]" />
-            
+
             <div className="w-full max-w-sm space-y-4 relative z-10">
               <div className="h-4 w-1/3 bg-primary/20 mb-8" />
               <div className="h-32 w-full bg-background border border-border p-4 relative">
@@ -214,7 +247,7 @@ export default function Home() {
               <div className="h-4 w-2/3 bg-muted/20" />
               <div className="h-4 w-1/2 bg-muted/20" />
             </div>
-            
+
             <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary" />
             <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary" />
           </div>
@@ -240,7 +273,7 @@ export default function Home() {
                   "Monetized creators (ads/sponsors/products/services)",
                   "Plateaued in the ~$3k–$10k/month range",
                   "Revenue feels capped despite consistent output",
-                  "Heavy reliance on one platform or one monetization source"
+                  "Heavy reliance on one platform or one monetization source",
                 ].map((item, i) => (
                   <li key={i} className="flex gap-3 text-muted-foreground text-sm">
                     <span className="w-1.5 h-1.5 bg-primary mt-2 rounded-full flex-shrink-0" />
@@ -260,7 +293,7 @@ export default function Home() {
                   "Pre-revenue beginners",
                   "Pure hobby channels",
                   "Exclusively paid-ads driven businesses",
-                  "Anyone wanting 'growth hacks' or viral tricks"
+                  "Anyone wanting 'growth hacks' or viral tricks",
                 ].map((item, i) => (
                   <li key={i} className="flex gap-3 text-muted-foreground/60 text-sm">
                     <span className="w-1.5 h-1.5 bg-muted-foreground/40 mt-2 rounded-full flex-shrink-0" />
@@ -281,14 +314,17 @@ export default function Home() {
               Apply to Participate
             </h2>
             <p className="text-muted-foreground text-lg mb-2">
-              Complete the form below to apply. Selected participants receive a complimentary <span className="text-primary">LoadFrame Fragility Audit</span>.
+              Complete the form below to apply. Selected participants receive a complimentary{" "}
+              <span className="text-primary">LoadFrame Fragility Audit</span>.
             </p>
-            <p className="text-sm font-medium text-white/80 mb-4 block">We review applications manually. Not all applicants are selected.</p>
+            <p className="text-sm font-medium text-white/80 mb-4 block">
+              We review applications manually. Not all applicants are selected.
+            </p>
             <p className="text-xs font-mono text-primary/60">Takes ~2–3 minutes.</p>
           </div>
 
-          <div className="bg-card border border-border p-6 md:p-10 shadow-2xl shadow-black/50 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
+          <div className="bg-card border border-border p-6 md:p-10 shadow-2xl shadow-black/50 relative">
+            <div className="absolute top-0 left-0 w-full h-1 bg-primary/70" />
             <LeadForm />
           </div>
         </div>

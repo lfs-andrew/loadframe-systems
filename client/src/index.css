@@ -4,38 +4,53 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure the root scroll gutter + background never flashes white */
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  overflow-anchor: none;
+  background: hsl(var(--background));
+}
+
+body {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  overflow-anchor: none;
+  background: hsl(var(--background));
+}
+
 :root {
   /* Dark Mode Only - Graphite & Gold Theme */
   --background: 0 0% 10%;      /* #1a1a1a */
   --foreground: 0 0% 94%;      /* #F0F0F0 */
-  
+
   --card: 0 0% 16%;            /* #2a2a2a */
   --card-foreground: 0 0% 94%;
-  
+
   --popover: 0 0% 16%;
   --popover-foreground: 0 0% 94%;
-  
+
   --primary: 43 47% 56%;       /* #C5A059 Gold */
   --primary-foreground: 0 0% 10%;
-  
+
   --secondary: 0 0% 23%;       /* #3a3a3a */
   --secondary-foreground: 0 0% 94%;
-  
+
   --muted: 0 0% 23%;
   --muted-foreground: 0 0% 60%;
-  
+
   --accent: 43 47% 56%;
   --accent-foreground: 0 0% 10%;
-  
+
   --destructive: 0 62% 30%;
   --destructive-foreground: 0 0% 98%;
-  
+
   --border: 0 0% 23%;
   --input: 0 0% 23%;
   --ring: 43 47% 56%;
-  
+
   --radius: 0px; /* Architectural/Flat look */
-  
+
   --font-sans: 'Manrope', sans-serif;
   --font-display: 'Space Grotesk', sans-serif;
 }
@@ -45,7 +60,7 @@
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     font-family: var(--font-sans);
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     @apply tracking-tight font-medium;
@@ -61,21 +76,21 @@
   .container-wide {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
+
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 
+    @apply bg-primary text-primary-foreground hover:bg-primary/90
            h-12 px-6 font-semibold uppercase tracking-wider text-sm
            transition-colors duration-200 rounded-none;
   }
-  
+
   .btn-outline {
-    @apply border border-border bg-transparent hover:bg-secondary 
+    @apply border border-border bg-transparent hover:bg-secondary
            h-12 px-6 font-semibold uppercase tracking-wider text-sm
            transition-colors duration-200 rounded-none;
   }
 
   .input-arch {
-    @apply bg-card border-border border rounded-none 
+    @apply bg-card border-border border rounded-none
            focus:ring-1 focus:ring-primary focus:border-primary
            h-12 px-4 w-full transition-all duration-200;
   }

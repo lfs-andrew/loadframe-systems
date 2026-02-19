@@ -46,18 +46,26 @@ async function buildAll() {
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
 
+  // ✅ Build server as ESM so import.meta.url works.
   await esbuild({
     entryPoints: ["server/index.ts"],
     platform: "node",
     bundle: true,
-    format: "cjs",
-    outfile: "dist/index.cjs",
+    format: "esm",
+    outfile: "dist/index.mjs",
     define: {
       "process.env.NODE_ENV": '"production"',
     },
     minify: true,
     external: externals,
     logLevel: "info",
+    // optional but helps Node resolve commonjs deps correctly under ESM
+    banner: {
+      js: `
+import { createRequire as __createRequire } from "module";
+const require = __createRequire(import.meta.url);
+`.trim(),
+    },
   });
 }
 
