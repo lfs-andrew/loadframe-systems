@@ -43,6 +43,13 @@ export async function sendLeadNotification(lead: LeadLike) {
   const EMAIL_FROM = env("EMAIL_FROM");
   const NOTIFY_TO = env("NOTIFY_TO");
 
+  console.log("[email debug] env check:", {
+  hasKey: !!process.env.SENDGRID_API_KEY,
+  from: process.env.EMAIL_FROM,
+  to: process.env.NOTIFY_TO,
+});
+
+
   if (!SENDGRID_API_KEY || !EMAIL_FROM || !NOTIFY_TO) {
     console.error("[email] Missing env at send time:", {
       hasKey: !!SENDGRID_API_KEY,
