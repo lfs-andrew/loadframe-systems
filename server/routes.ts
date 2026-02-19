@@ -16,14 +16,14 @@ export async function registerRoutes(
       // Save to DB
       const lead = await storage.createLead(input);
 
-      // Respond immediately for UX speed
-      res.status(201).json(lead);
+      // Attempt email (DON'T hide failures)
+      const emailResult = await sendLeadNotification(input);
 
-      // Fire-and-forget email (use original validated input)
-      sendLeadNotification(input).catch((err) => {
-        console.error("Lead notification email failed:", err);
+      // Respond with both DB + email status so you can see what's failing
+      return res.status(201).json({
+        lead,
+        email: emailResult,
       });
-
     } catch (err) {
       if (err instanceof z.ZodError) {
         return res.status(400).json({

@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 
 type LeadLike = Record<string, any>;
 
@@ -6,34 +6,9 @@ function env(name: string) {
   return (process.env[name] || "").trim();
 }
 
-const SMTP_HOST = env("SMTP_HOST");
-const SMTP_PORT = Number(env("SMTP_PORT") || "587");
-const SMTP_USER = env("SMTP_USER");
-const SMTP_PASS = env("SMTP_PASS");
-
-export const EMAIL_FROM = env("EMAIL_FROM") || SMTP_USER;
-export const NOTIFY_TO = env("NOTIFY_TO");
-
-function isEmailConfigured() {
-  return Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS && EMAIL_FROM && NOTIFY_TO);
-}
-
-function getTransport() {
-  // Lazy-create transporter only when needed
-  return nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    secure: SMTP_PORT === 465, // true for 465, false for 587
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
-    },
-  });
-}
-
 function formatLead(lead: LeadLike) {
-  // Keep it simple + readable
-  const safe = (v: any) => (v === undefined || v === null || v === "" ? "-" : String(v));
+  const safe = (v: any) =>
+    v === undefined || v === null || v === "" ? "-" : String(v);
 
   return [
     `New Lead Submission`,
@@ -47,7 +22,11 @@ function formatLead(lead: LeadLike) {
     `Stuck Duration: ${safe(lead.stuckDuration)}`,
     ``,
     `Revenue Mix (%): ${JSON.stringify(lead.revenueMix ?? {}, null, 2)}`,
-    `Monetization Flags: ${Array.isArray(lead.monetizationFlags) ? lead.monetizationFlags.join(", ") : safe(lead.monetizationFlags)}`,
+    `Monetization Flags: ${
+      Array.isArray(lead.monetizationFlags)
+        ? lead.monetizationFlags.join(", ")
+        : safe(lead.monetizationFlags)
+    }`,
     ``,
     `Biggest Worry:`,
     `${safe(lead.biggestWorry)}`,
@@ -60,23 +39,33 @@ function formatLead(lead: LeadLike) {
 }
 
 export async function sendLeadNotification(lead: LeadLike) {
-  if (!isEmailConfigured()) {
-    // Do NOT crash dev/prod; just skip until configured.
-    console.warn(
-      `[email] Skipping email notification (SMTP not configured). Missing one of: SMTP_HOST, SMTP_USER, SMTP_PASS, EMAIL_FROM, NOTIFY_TO`
-    );
-    return { ok: false, skipped: true };
+  const SENDGRID_API_KEY = env("SENDGRID_API_KEY");
+  const EMAIL_FROM = env("EMAIL_FROM");
+  const NOTIFY_TO = env("NOTIFY_TO");
+
+  if (!SENDGRID_API_KEY || !EMAIL_FROM || !NOTIFY_TO) {
+    console.error("[email] Missing env at send time:", {
+      hasKey: !!SENDGRID_API_KEY,
+      from: EMAIL_FROM,
+      to: NOTIFY_TO,
+    });
+    return { ok: false };
   }
 
-  const transporter = getTransport();
-  const text = formatLead(lead);
+  sgMail.setApiKey(SENDGRID_API_KEY);
 
-  await transporter.sendMail({
-    from: EMAIL_FROM,
-    to: NOTIFY_TO,
-    subject: `New LoadFrame Application — ${lead?.name || "Unknown"}`,
-    text,
-  });
+  try {
+    await sgMail.send({
+      to: NOTIFY_TO,
+      from: EMAIL_FROM,
+      subject: `New LoadFrame Application — ${lead?.name || "Unknown"}`,
+      text: formatLead(lead),
+    });
 
-  return { ok: true };
+    console.log("[email] Sent successfully");
+    return { ok: true };
+  } catch (err: any) {
+    console.error("[email] SendGrid error:", err?.response?.body || err);
+    return { ok: false };
+  }
 }
