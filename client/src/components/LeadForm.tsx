@@ -50,31 +50,38 @@ export function LeadForm() {
   const { mutate, isPending } = useCreateLead();
   const [success, setSuccess] = useState(false);
 
-  const form = useForm<LeadFormValues & ExtraFields>({
-    resolver: zodResolver(insertLeadSchema as any),
-    defaultValues: {
-      // insertLeadSchema fields
-      name: "",
-      email: "",
-      link: "",
-      primaryPlatform: "",
-      followerRange: "",
-      monthlyRevenueRange: "",
-      stuckDuration: "",
-      revenueMix: { ads: 0, sponsors: 0, products: 0, affiliates: 0, other: 0 },
-      monetizationFlags: [],
-      biggestWorry: "",
-      openToCall: false,
-      consent: false,
+const clientSchema = insertLeadSchema.extend({
+  revenueCert: z.boolean(),
+  decisionMaker: z.boolean(),
+  largestSourcePct: z
+    .enum(["0_25", "26_50", "51_75", "76_100"])
+    .or(z.literal("")),
+  whyNow: z.string(),
+});
 
-      // extra fields
-      revenueCert: false,
-      decisionMaker: false,
-      largestSourcePct: "",
-      whyNow: "",
-    },
-    mode: "onBlur",
-  });
+  const form = useForm<z.infer<typeof clientSchema>>({
+  resolver: zodResolver(clientSchema),
+  defaultValues: {
+    name: "",
+    email: "",
+    link: "",
+    primaryPlatform: "",
+    followerRange: "",
+    monthlyRevenueRange: "",
+    stuckDuration: "",
+    revenueMix: { ads: 0, sponsors: 0, products: 0, affiliates: 0, other: 0 },
+    monetizationFlags: [],
+    biggestWorry: "",
+    openToCall: false,
+    consent: false,
+
+    revenueCert: false,
+    decisionMaker: false,
+    largestSourcePct: "",
+    whyNow: "",
+  },
+  mode: "onBlur",
+});
 
   const revenueMix = form.watch("revenueMix") as Record<string, number>;
 
@@ -96,7 +103,7 @@ export function LeadForm() {
     if (mixTotal === 100) form.clearErrors("revenueMix");
   }, [mixTotal, mixTouched, form]);
 
-  function onSubmit(values: LeadFormValues & ExtraFields) {
+  function onSubmit(values: z.infer<typeof clientSchema>) {
     // hard client gates (without changing backend)
     if (!values.revenueCert) {
       form.setError("revenueCert" as any, {
@@ -215,8 +222,8 @@ export function LeadForm() {
                 <div className="flex flex-row items-start space-x-3 space-y-0 p-2 border border-border/40 bg-background/20">
                   <FormControl>
                     <Checkbox
-                      checked={!!field.value}
-                      onCheckedChange={field.onChange}
+                      checked={field.value === true}
+                      onCheckedChange={(v) => field.onChange(v === true)}
                       className="rounded-none border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                     />
                   </FormControl>
