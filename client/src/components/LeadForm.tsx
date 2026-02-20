@@ -136,13 +136,17 @@ const clientSchema = insertLeadSchema.extend({
     }
 
     // Pack new fields into biggestWorry so backend + email captures them
-    const packedBiggestWorry = [
-      values.biggestWorry?.trim() ? `Breaks first:\n${values.biggestWorry.trim()}` : "",
-      values.largestSourcePct ? `\nLargest revenue source (%): ${values.largestSourcePct}` : "",
-      values.whyNow?.trim() ? `\nWhy applying now:\n${values.whyNow.trim()}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
+    const notes = [
+      `Revenue gate confirmed: ${values.revenueCert ? "YES" : "NO"}`,
+      `Primary decision-maker: ${values.decisionMaker ? "YES" : "NO"}`,
+      `Largest revenue source (%): ${values.largestSourcePct || "-"}`,
+      "",
+      "Breaks first if traffic -50% for 90 days:",
+      values.biggestWorry?.trim() || "-",
+      "",
+      "Why applying now:",
+      values.whyNow?.trim() || "-",
+    ].join("\n");
 
     const payload: LeadFormValues = {
       name: values.name,
@@ -154,7 +158,7 @@ const clientSchema = insertLeadSchema.extend({
       stuckDuration: values.stuckDuration,
       revenueMix: values.revenueMix,
       monetizationFlags: values.monetizationFlags,
-      biggestWorry: packedBiggestWorry || values.biggestWorry,
+      biggestWorry: notes, // <-- ALWAYS send packed notes here
       openToCall: values.openToCall,
       consent: values.consent,
     };
