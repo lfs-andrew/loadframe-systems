@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/form";
 
 import { NativeSelect } from "@/components/ui/native-select";
-
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -39,13 +38,22 @@ const GRID_LABEL_CLASS =
 
 type LeadFormValues = z.infer<typeof insertLeadSchema>;
 
+// Client-only additions (do NOT go to backend schema directly)
+type ExtraFields = {
+  revenueCert: boolean;
+  decisionMaker: boolean;
+  largestSourcePct: "" | "0_25" | "26_50" | "51_75" | "76_100";
+  whyNow: string;
+};
+
 export function LeadForm() {
   const { mutate, isPending } = useCreateLead();
   const [success, setSuccess] = useState(false);
 
-  const form = useForm<LeadFormValues>({
-    resolver: zodResolver(insertLeadSchema),
+  const form = useForm<LeadFormValues & ExtraFields>({
+    resolver: zodResolver(insertLeadSchema as any),
     defaultValues: {
+      // insertLeadSchema fields
       name: "",
       email: "",
       link: "",
@@ -58,6 +66,12 @@ export function LeadForm() {
       biggestWorry: "",
       openToCall: false,
       consent: false,
+
+      // extra fields
+      revenueCert: false,
+      decisionMaker: false,
+      largestSourcePct: "",
+      whyNow: "",
     },
     mode: "onBlur",
   });
@@ -82,21 +96,63 @@ export function LeadForm() {
     if (mixTotal === 100) form.clearErrors("revenueMix");
   }, [mixTotal, mixTouched, form]);
 
-  function onSubmit(values: LeadFormValues) {
+  function onSubmit(values: LeadFormValues & ExtraFields) {
+    // hard client gates (without changing backend)
+    if (!values.revenueCert) {
+      form.setError("revenueCert" as any, {
+        type: "manual",
+        message: "Please confirm you generate at least $3,000/month.",
+      });
+      return;
+    }
+
+    if (!values.decisionMaker) {
+      form.setError("decisionMaker" as any, {
+        type: "manual",
+        message: "Please confirm you are the primary decision-maker.",
+      });
+      return;
+    }
+
+    // keep your revenue mix validation
     const total = Object.values(values.revenueMix as Record<string, number>).reduce(
       (sum, v) => sum + (Number(v) || 0),
       0
     );
 
     if (total !== 100) {
-      form.setError("revenueMix", {
+      form.setError("revenueMix" as any, {
         type: "manual",
         message: `Revenue breakdown should total 100%. Current total: ${total}%.`,
       });
       return;
     }
 
-    mutate(values, {
+    // Pack new fields into biggestWorry so backend + email captures them
+    const packedBiggestWorry = [
+      values.biggestWorry?.trim() ? `Breaks first:\n${values.biggestWorry.trim()}` : "",
+      values.largestSourcePct ? `\nLargest revenue source (%): ${values.largestSourcePct}` : "",
+      values.whyNow?.trim() ? `\nWhy applying now:\n${values.whyNow.trim()}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    const payload: LeadFormValues = {
+      name: values.name,
+      email: values.email,
+      link: values.link,
+      primaryPlatform: values.primaryPlatform,
+      followerRange: values.followerRange,
+      monthlyRevenueRange: values.monthlyRevenueRange,
+      stuckDuration: values.stuckDuration,
+      revenueMix: values.revenueMix,
+      monetizationFlags: values.monetizationFlags,
+      biggestWorry: packedBiggestWorry || values.biggestWorry,
+      openToCall: values.openToCall,
+      consent: values.consent,
+    };
+
+    mutate(payload, {
       onSuccess: () => {
         setSuccess(true);
         form.reset();
@@ -118,7 +174,10 @@ export function LeadForm() {
           </svg>
         </div>
         <h3 className="text-2xl font-display font-bold text-white mb-2">Application Received</h3>
-        <p className="text-muted-foreground">Thanks — if selected, we’ll reach out within 7 days.</p>
+        <p className="text-muted-foreground">
+          If your structure aligns with the study criteria, you’ll receive a direct outreach to schedule a brief
+          structural review call.
+        </p>
         <Button
           onClick={() => setSuccess(false)}
           variant="outline"
@@ -130,9 +189,70 @@ export function LeadForm() {
     );
   }
 
+  const revenueRange = form.watch("monthlyRevenueRange");
+  const revenueGateHint =
+    revenueRange === "under_1k" || revenueRange === "1k_3k"
+      ? "Note: This study is designed for monetized creators earning approximately $3,000+/month."
+      : "This diagnostic is designed for monetized creators earning approximately $3,000+/month.";
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit as any)} className="space-y-8">
+        {/* Top framing */}
+        <div className="bg-background/30 border border-border/50 p-4">
+          <p className="text-sm text-muted-foreground">
+            {revenueGateHint}
+          </p>
+        </div>
+
+        {/* Required gates */}
+        <div className="space-y-3">
+          <FormField
+            control={form.control}
+            name={"revenueCert" as any}
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <div className="flex flex-row items-start space-x-3 space-y-0 p-2 border border-border/40 bg-background/20">
+                  <FormControl>
+                    <Checkbox
+                      checked={!!field.value}
+                      onCheckedChange={field.onChange}
+                      className="rounded-none border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                    />
+                  </FormControl>
+                  <FormLabel className="text-xs text-white font-medium cursor-pointer leading-tight">
+                    I currently generate at least <span className="text-primary">$3,000/month</span> from my creator
+                    business.
+                  </FormLabel>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name={"decisionMaker" as any}
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <div className="flex flex-row items-start space-x-3 space-y-0 p-2 border border-border/40 bg-background/20">
+                  <FormControl>
+                    <Checkbox
+                      checked={!!field.value}
+                      onCheckedChange={field.onChange}
+                      className="rounded-none border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                    />
+                  </FormControl>
+                  <FormLabel className="text-xs text-white font-medium cursor-pointer leading-tight">
+                    I am the primary decision-maker in my business.
+                  </FormLabel>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         {/* Name / Email */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <FormField
@@ -191,7 +311,7 @@ export function LeadForm() {
           )}
         />
 
-        {/* 4-up selects — NativeSelect (no portal, no jump) */}
+        {/* 4-up selects */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
           {/* Platform */}
           <FormField
@@ -352,7 +472,7 @@ export function LeadForm() {
           <div className="mt-3">
             <FormField
               control={form.control}
-              name="revenueMix"
+              name={"revenueMix" as any}
               render={() => (
                 <FormItem>
                   <FormMessage />
@@ -361,6 +481,29 @@ export function LeadForm() {
             />
           </div>
         </div>
+
+        {/* NEW: Revenue concentration */}
+        <FormField
+          control={form.control}
+          name={"largestSourcePct" as any}
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel className="text-xs uppercase tracking-wider text-muted-foreground">
+                Approximately what % of your revenue comes from your single largest source?
+              </FormLabel>
+              <FormControl>
+                <NativeSelect {...field} value={field.value || ""} className="input-arch">
+                  <option value="">Select</option>
+                  <option value="0_25">0–25%</option>
+                  <option value="26_50">26–50%</option>
+                  <option value="51_75">51–75%</option>
+                  <option value="76_100">76–100%</option>
+                </NativeSelect>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Monetization flags */}
         <div className="space-y-4">
@@ -400,18 +543,19 @@ export function LeadForm() {
           <FormMessage />
         </div>
 
+        {/* Updated worry question */}
         <FormField
           control={form.control}
           name="biggestWorry"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-xs uppercase tracking-wider text-muted-foreground">
-                Biggest Business Worry if reach drops 50%
+                If your primary platform traffic dropped 50% for 90 days, what would break first in your business?
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Tell us what keeps you up at night..."
-                  className="input-arch min-h-[100px] resize-none"
+                  placeholder="Be specific (ex: sponsors dry up, ad revenue collapses, offer conversions drop, cash runway ends, etc.)"
+                  className="input-arch min-h-[110px] resize-none"
                   {...field}
                 />
               </FormControl>
@@ -420,6 +564,28 @@ export function LeadForm() {
           )}
         />
 
+        {/* NEW: Why now */}
+        <FormField
+          control={form.control}
+          name={"whyNow" as any}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-xs uppercase tracking-wider text-muted-foreground">
+                Why are you applying for this diagnostic right now?
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="What changed recently? What’s urgent? What triggered this now?"
+                  className="input-arch min-h-[90px] resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Existing: openToCall + consent */}
         <div className="space-y-3">
           <FormField
             control={form.control}
